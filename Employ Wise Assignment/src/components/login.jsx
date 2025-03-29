@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,8 +9,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  // Check if the user is already logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -22,7 +21,6 @@ const Login = () => {
     setLoading(true);
     setError("");
 
-    // Basic form validation
     if (!email || !password) {
       setError("Please fill in both email and password.");
       setLoading(false);
@@ -40,8 +38,11 @@ const Login = () => {
         email,
         password,
       });
-
-      // Store token in local storage
+      if (email === "eve.holt@reqres.in" && password !== "cityslicka") {
+        setError("Invalid password. Try again.");
+        setLoading(false);
+        return;
+      }
       localStorage.setItem("token", response.data.token);
       navigate("/users");
     } catch (err) {
@@ -54,41 +55,40 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto", textphysics: "center" }}>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>}
-      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        <input
-          type="email"
-          placeholder="Enter email (eve.holt@reqres.in)"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ padding: "10px", fontSize: "16px" }}
-        />
-        <input
-          type="password"
-          placeholder="Enter password (cityslicka)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ padding: "10px", fontSize: "16px" }}
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            backgroundColor: loading ? "#ccc" : "#007bff",
-            color: "white",
-            border: "none",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+    <div className="container-fluid d-flex justify-content-center align-items-center vh-100">
+      <div className="card shadow p-4" style={{ maxWidth: "400px", width: "100%" }}>
+        <h2 className="text-center mb-4">Login</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className={`btn btn-primary w-100 ${loading ? 'disabled' : ''}`}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

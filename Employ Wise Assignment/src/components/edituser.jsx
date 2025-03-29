@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const EditUser = () => {
   const location = useLocation();
@@ -16,6 +17,13 @@ const EditUser = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -25,7 +33,6 @@ const EditUser = () => {
     setError("");
     setMessage("");
 
-    // Form validation
     if (!formData.first_name || !formData.last_name || !formData.email) {
       setError("Please fill in all fields.");
       return;
@@ -39,8 +46,6 @@ const EditUser = () => {
     try {
       await axios.put(`https://reqres.in/api/users/${id}`, formData);
       setMessage("User updated successfully!");
-
-      // Store the updated user in localStorage
       const updatedUser = { id: Number(id), ...formData };
       const storedUpdates = JSON.parse(localStorage.getItem("userUpdates")) || {};
       storedUpdates[id] = updatedUser;
@@ -56,66 +61,62 @@ const EditUser = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Edit User</h2>
-      {message && <p style={{ color: "green", marginBottom: "10px" }}>{message}</p>}
-      {error && <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>}
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        <input
-          type="text"
-          name="first_name"
-          placeholder="First Name"
-          value={formData.first_name}
-          onChange={handleChange}
-          required
-          style={{ padding: "10px", fontSize: "16px" }}
-        />
-        <input
-          type="text"
-          name="last_name"
-          placeholder="Last Name"
-          value={formData.last_name}
-          onChange={handleChange}
-          required
-          style={{ padding: "10px", fontSize: "16px" }}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          style={{ padding: "10px", fontSize: "16px" }}
-        />
-        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-          <button
-            type="submit"
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Save Changes
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("/users")}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#6c757d",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="card shadow p-4" style={{ maxWidth: "400px", width: "100%" }}>
+        <h2 className="text-center mb-4">Edit User</h2>
+        {message && <div className="alert alert-success">{message}</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              name="first_name"
+              placeholder="First Name"
+              value={formData.first_name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              name="last_name"
+              placeholder="Last Name"
+              value={formData.last_name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="email"
+              className="form-control"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="d-flex gap-2 justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-primary"
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate("/users")}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -11,7 +12,6 @@ const UserList = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Check for token on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -19,7 +19,7 @@ const UserList = () => {
     }
   }, [navigate]);
 
-  // Fetch users when page changes
+
   useEffect(() => {
     fetchUsers(page);
   }, [page]);
@@ -29,7 +29,6 @@ const UserList = () => {
       const response = await axios.get(`https://reqres.in/api/users?page=${pageNum}`);
       const apiUsers = response.data.data;
 
-      // Merge with locally stored updates
       const storedUpdates = JSON.parse(localStorage.getItem("userUpdates")) || {};
       const mergedUsers = apiUsers.map((user) => {
         return storedUpdates[user.id] ? { ...user, ...storedUpdates[user.id] } : user;
@@ -45,7 +44,6 @@ const UserList = () => {
     }
   };
 
-  // Handle search
   useEffect(() => {
     if (searchTerm) {
       const filtered = users.filter((user) =>
@@ -68,11 +66,8 @@ const UserList = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://reqres.in/api/users/${id}`);
-      // Update UI after successful deletion
       setUsers(users.filter((user) => user.id !== id));
       setFilteredUsers(filteredUsers.filter((user) => user.id !== id));
-
-      // Remove the deleted user from localStorage
       const storedUpdates = JSON.parse(localStorage.getItem("userUpdates")) || {};
       delete storedUpdates[id];
       localStorage.setItem("userUpdates", JSON.stringify(storedUpdates));
@@ -84,117 +79,97 @@ const UserList = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userUpdates"); // Clear user updates on logout
+    localStorage.removeItem("userUpdates"); 
     navigate("/");
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "20px auto", padding: "20px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>User List</h2>
         <button
           onClick={handleLogout}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#dc3545",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
+          className="btn btn-danger"
         >
           Logout
         </button>
       </div>
-      {error && <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>}
-      <input
-        type="text"
-        placeholder="Search by name..."
-        value={searchTerm}
-        onChange={handleSearch}
-        style={{ width: "100%", padding: "10px", marginBottom: "20px", fontSize: "16px" }}
-      />
+
+      {error && <div className="alert alert-danger">{error}</div>}
+      
+      <div className="mb-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by name..."
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+
       {filteredUsers.length === 0 ? (
-        <p>No users found.</p>
+        <p className="text-center">No users found.</p>
       ) : (
         <>
-          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "20px" }}>
-            <thead>
-              <tr style={{ backgroundColor: "#f1f1f1" }}>
-                <th style={{ padding: "10px", border: "1px solid #ddd" }}>Avatar</th>
-                <th style={{ padding: "10px", border: "1px solid #ddd" }}>Name</th>
-                <th style={{ padding: "10px", border: "1px solid #ddd" }}>Email</th>
-                <th style={{ padding: "10px", border: "1px solid #ddd" }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user) => (
-                <tr key={user.id}>
-                  <td style={{ padding: "10px", border: "1px solid #ddd", textAlign: "center" }}>
-                    <img src={user.avatar} alt="Avatar" width="50" style={{ borderRadius: "50%" }} />
-                  </td>
-                  <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                    {user.first_name} {user.last_name}
-                  </td>
-                  <td style={{ padding: "10px", border: "1px solid #ddd" }}>{user.email}</td>
-                  <td style={{ padding: "10px", border: "1px solid #ddd", textAlign: "center" }}>
-                    <button
-                      onClick={() => handleEdit(user)}
-                      style={{
-                        padding: "5px 10px",
-                        marginRight: "5px",
-                        backgroundColor: "#007bff",
-                        color: "white",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(user.id)}
-                      style={{
-                        padding: "5px 10px",
-                        backgroundColor: "#dc3545",
-                        color: "white",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="table-responsive mb-4">
+            <table className="table table-bordered table-hover">
+              <thead className="table-light">
+                <tr>
+                  <th className="text-center">Avatar</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th className="text-center">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div style={{ textAlign: "center" }}>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user) => (
+                  <tr key={user.id}>
+                    <td className="text-center">
+                      <img src={user.avatar} alt="Avatar" width="50" className="rounded-circle" />
+                    </td>
+                    <td>
+                      {user.first_name}
+                    </td>
+                    <td>
+                       {user.last_name}
+                    </td>
+                    <td>{user.email}</td>
+                    <td className="text-center">
+                      <button
+                        onClick={() => handleEdit(user)}
+                        className="btn btn-primary btn-sm me-2"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(user.id)}
+                        className="btn btn-danger btn-sm"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="d-flex justify-content-center align-items-center">
             <button
               onClick={() => setPage(page - 1)}
               disabled={page === 1}
-              style={{
-                padding: "8px 16px",
-                marginRight: "10px",
-                backgroundColor: page === 1 ? "#ccc" : "#007bff",
-                color: "white",
-                border: "none",
-                cursor: page === 1 ? "not-allowed" : "pointer",
-              }}
+              className={`btn ${page === 1 ? 'btn-secondary' : 'btn-primary'} me-2`}
             >
               Previous
             </button>
-            <span style={{ margin: "0 10px" }}>
+            <span className="mx-3">
               Page {page} of {totalPages}
             </span>
             <button
               onClick={() => setPage(page + 1)}
               disabled={page === totalPages}
-              style={{
-                padding: "8px 16px",
-                backgroundColor: page === totalPages ? "#ccc" : "#007bff",
-                color: "white",
-                border: "none",
-                cursor: page === totalPages ? "not-allowed" : "pointer",
-              }}
+              className={`btn ${page === totalPages ? 'btn-secondary' : 'btn-primary'} ms-2`}
             >
               Next
             </button>
