@@ -64,7 +64,7 @@ Ensure you have the following installed:
 - **Live Deployment on a free hosting platform.**
 
 ## Useful Links
-- **Live Demo:** [[Deployment URL](https://employ-wise-assignment-pink.vercel.app)]
+- **DEPLOYMENT:** [[Deployment URL](https://employ-wise-assignment-pink.vercel.app)]
 - **GitHub Repository:** [[Repo URL](https://github.com/Hathim0001/Global-Groupware-Solutions-Limited-Hackathon-Assignment-)]
 
 ## Author
