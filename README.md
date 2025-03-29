@@ -41,8 +41,8 @@ Ensure you have the following installed:
 ### Installation
 1. **Clone the repository:**
    ```sh
-   git clone <repository_url>
-   cd employwise-frontend
+   git clone <[repository_url](https://github.com/Hathim0001/Global-Groupware-Solutions-Limited-Hackathon-Assignment-)>
+   cd Employ Wise Assignment
    ```
 2. **Install dependencies:**
    ```sh
@@ -52,7 +52,7 @@ Ensure you have the following installed:
    ```sh
    npm start  # or yarn start
    ```
-4. **Access the application:** Open `http://localhost:3000` in your browser.
+4. **Access the application:** Open `http://localhost:5173` in your browser.
 
 ## Assumptions & Considerations
 - **Authentication is simulated** (Reqres API does not persist login state).
