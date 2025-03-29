@@ -41,16 +41,16 @@ Ensure you have the following installed:
 ### Installation
 1. **Clone the repository:**
    ```sh
-   git clone [repository_url](https://github.com/Hathim0001/Global-Groupware-Solutions-Limited-Hackathon-Assignment-)
+   git clone https://github.com/Hathim0001/Global-Groupware-Solutions-Limited-Hackathon-Assignment-
    cd Employ Wise Assignment
    ```
 2. **Install dependencies:**
    ```sh
-   npm install  # or yarn install
+   npm install 
    ```
 3. **Run the development server:**
    ```sh
-   npm start  # or yarn start
+   npm start  
    ```
 4. **Access the application:** Open `http://localhost:5173` in your browser.
 
