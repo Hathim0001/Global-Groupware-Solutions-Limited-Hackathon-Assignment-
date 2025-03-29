@@ -36,7 +36,6 @@ EmployWise is a React-based frontend application that integrates with the Reqres
 ## Getting Started
 ### Prerequisites
 Ensure you have the following installed:
-- Node.js (v14+ recommended)
 - npm or yarn
 
 ### Installation
