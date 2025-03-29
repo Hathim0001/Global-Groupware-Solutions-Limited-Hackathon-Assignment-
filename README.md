@@ -41,7 +41,7 @@ Ensure you have the following installed:
 ### Installation
 1. **Clone the repository:**
    ```sh
-   git clone <[repository_url](https://github.com/Hathim0001/Global-Groupware-Solutions-Limited-Hackathon-Assignment-)>
+   git clone [repository_url](https://github.com/Hathim0001/Global-Groupware-Solutions-Limited-Hackathon-Assignment-)
    cd Employ Wise Assignment
    ```
 2. **Install dependencies:**
